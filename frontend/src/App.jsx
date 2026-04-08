@@ -8,6 +8,8 @@ import AdminUsers from './pages/AdminUsers';
 import SearchFlight from './pages/SearchFlight';
 import AdminFlights from './pages/AdminFlights';
 import FlightDetails from './pages/FlightDetails';
+import Checkout from './pages/Checkout';
+import AdminDashboard from './pages/AdminDashboard';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -52,6 +54,7 @@ const Navbar = () => {
 // ... (Home component giữ nguyên)
 const Home = () => <div className="p-8 text-center text-2xl font-bold">Trang chủ Tìm kiếm vé (Sẽ làm sau)</div>;
 
+
 function App() {
   return (
     <Router>
@@ -69,6 +72,8 @@ function App() {
             <Route path="/" element={<SearchFlight />} />
             <Route path="/admin/flights" element={<AdminFlights />} />
             <Route path="/flight/:id" element={<FlightDetails />} />
+            <Route path="/" element={<Checkout />} />
+            <Route path="/dashboard" element={<AdminDashboard />} />
           </Routes>
         </main>
       </div>
