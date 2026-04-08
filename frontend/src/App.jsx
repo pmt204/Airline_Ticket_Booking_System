@@ -3,9 +3,11 @@ import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
-// IMPORT 2 COMPONENT MỚI
 import Profile from './pages/Profile';
 import AdminUsers from './pages/AdminUsers';
+import SearchFlight from './pages/SearchFlight';
+import AdminFlights from './pages/AdminFlights';
+import FlightDetails from './pages/FlightDetails';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -13,6 +15,9 @@ const Navbar = () => {
   return (
     <nav className="bg-primary text-white p-4 flex justify-between items-center shadow-md">
       <Link to="/" className="text-xl font-bold">✈️ FlightBooking</Link>
+      <Link to="/admin/flights" className="bg-green-600 px-3 py-1 rounded hover:bg-green-700 text-sm">
+          Giao diện Admin Chuyến Bay
+        </Link>
       <div className="space-x-4 flex items-center">
         <Link to="/" className="hover:text-secondary">Trang chủ</Link>
         
@@ -61,6 +66,9 @@ function App() {
             {/* THÊM 2 ROUTE MỚI */}
             <Route path="/profile" element={<Profile />} />
             <Route path="/admin/users" element={<AdminUsers />} />
+            <Route path="/" element={<SearchFlight />} />
+            <Route path="/admin/flights" element={<AdminFlights />} />
+            <Route path="/flight/:id" element={<FlightDetails />} />
           </Routes>
         </main>
       </div>
