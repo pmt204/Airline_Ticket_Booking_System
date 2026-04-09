@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const airlineSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true }, // Vd: Vietnam Airlines
-  code: { type: String, required: true, unique: true }, // Vd: VN
+  name: { type: String, required: true, unique: true }, 
+  code: { type: String, required: true, unique: true }, 
   logoUrl: { type: String, default: '' },
   isActive: { type: Boolean, default: true }
 }, { timestamps: true });

@@ -1,30 +1,37 @@
 const mongoose = require('mongoose');
 
-// Sub-schema (Schema con) cho Hành khách, được nhúng vào Booking
+// 1. CẬP NHẬT LẠI HÀNH KHÁCH 
 const passengerSchema = new mongoose.Schema({
-  fullName: { type: String, required: true },
-  identityNumber: { type: String, required: true }, // CMND/CCCD/Passport
+  lastName: { type: String, required: true },
+  firstName: { type: String, required: true },
+  email: { type: String, required: true },
+  phone: { type: String, required: true },
+  
+  outboundSeat: { type: String, default: '' }, 
+  inboundSeat: { type: String, default: '' },  
+
+  identityNumber: { type: String, default: '' }, 
   passengerType: { type: String, enum: ['Adult', 'Child', 'Infant'], default: 'Adult' },
-  seatNumber: { type: String }, // Ghế mà hành khách này chọn
-  extraBaggage: { type: Number, default: 0 } // Hành lý mua thêm (kg)
+  extraBaggage: { type: Number, default: 0 } 
 });
 
+// 2. CẬP NHẬT BOOKING 
 const bookingSchema = new mongoose.Schema({
-  bookingCode: { type: String, required: true, unique: true }, // Mã đặt chỗ (Vd: PNR-8A9X)
+  bookingCode: { type: String, required: true, unique: true }, 
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null }, 
   
-  // Tham chiếu
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  flight: { type: mongoose.Schema.Types.ObjectId, ref: 'Flight', required: true },
-  appliedVoucher: { type: mongoose.Schema.Types.ObjectId, ref: 'Voucher', default: null }, // Có thể null nếu không dùng mã
+  outboundFlight: { type: mongoose.Schema.Types.ObjectId, ref: 'Flight', required: true },
+  inboundFlight: { type: mongoose.Schema.Types.ObjectId, ref: 'Flight', default: null },
   
-  // Nhúng danh sách hành khách
+  appliedVoucher: { type: mongoose.Schema.Types.ObjectId, ref: 'Voucher', default: null }, 
   passengers: [passengerSchema],
-  
-  // Tiền bạc & Trạng thái
   totalAmount: { type: Number, required: true },
-  paymentMethod: { type: String, enum: ['VNPay', 'MoMo', 'CreditCard', 'PayLater'], default: 'PayLater' },
-  paymentStatus: { type: String, enum: ['Pending', 'Paid', 'Failed', 'Refunded'], default: 'Pending' },
-  bookingStatus: { type: String, enum: ['Confirmed', 'Cancelled', 'Completed'], default: 'Confirmed' }
+  paymentMethod: { type: String, enum: ['VNPay', 'MoMo', 'CreditCard', 'PayLater'], default: 'VNPay' }, 
+  paymentStatus: { type: String, enum: ['Unpaid', 'Pending', 'Paid', 'Failed', 'Refunded'], default: 'Unpaid' },
+  bookingStatus: { type: String, enum: ['Pending', 'Confirmed', 'Cancelled', 'Completed'], default: 'Pending' },
+  isCheckedIn: { type: Boolean, default: false },
+  rating: { type: Number, min: 1, max: 5, default: null }, 
+  reviewComment: { type: String, default: '' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Booking', bookingSchema);
