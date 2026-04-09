@@ -1,21 +1,35 @@
 const express = require('express');
 const router = express.Router();
-const { createBooking, processPayment, getAllBookings, updateBookingStatus, getDashboardStats, getTicketDetails, confirmVNPayPayment, getMyBookings, onlineCheckin } = require('../controllers/bookingController');
 
-// IMPORT MIDDLEWARE
-const { protect, admin } = require('../middleware/authMiddleware');
+const { 
+  createBooking, 
+  confirmVNPayPayment, 
+  getAllBookings, 
+  updateBookingStatus, 
+  getDashboardStats, 
+  getTicketDetails, 
+  getMyBookings, 
+  onlineCheckin,
+  cancelBooking,
+  submitReview
+} = require('../controllers/bookingController');
 
-// KHÁCH HÀNG (Cần đăng nhập)
-router.post('/', protect, createBooking); 
-router.post('/:id/pay', protect, processPayment); 
-router.get('/:id/ticket', protect, getTicketDetails); 
-router.post('/confirm', confirmVNPayPayment);
-router.get('/my-bookings', protect, getMyBookings);
-router.post('/checkin', onlineCheckin);
+const { protect } = require('../middleware/authMiddleware');
 
-// ADMIN (Cần quyền Admin)
-router.get('/', protect, admin, getAllBookings); 
-router.get('/stats', protect, admin, getDashboardStats); 
-router.put('/:id/status', protect, admin, updateBookingStatus); 
+router.post('/', createBooking);                      
+router.post('/confirm', confirmVNPayPayment);         
+router.post('/checkin', onlineCheckin);               
+
+router.get('/dashboard', getDashboardStats);          
+router.get('/all', getAllBookings);                   
+
+router.get('/my-bookings', protect, getMyBookings);   
+
+router.get('/:id', getTicketDetails);                 
+router.put('/:id/status', updateBookingStatus);  
+
+router.put('/:id/cancel', cancelBooking);
+
+router.put('/:id/review', protect, submitReview);
 
 module.exports = router;

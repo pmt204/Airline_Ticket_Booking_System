@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/'); // Đăng nhập xong đẩy về Trang chủ
+      navigate('/'); 
     } catch (err) {
       setError(err.response?.data?.message || 'Có lỗi xảy ra khi đăng nhập');
     }

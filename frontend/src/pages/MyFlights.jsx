@@ -10,12 +10,10 @@ const MyFlights = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Nếu chưa đăng nhập, đuổi về trang login
     if (!user) {
       navigate('/login');
       return;
     }
-
     const fetchMyBookings = async () => {
       try {
         const { data } = await axiosClient.get('/api/bookings/my-bookings');
@@ -26,9 +24,26 @@ const MyFlights = () => {
         setLoading(false);
       }
     };
-
     fetchMyBookings();
   }, [user, navigate]);
+
+  // HÀM XỬ LÝ HỦY VÉ
+  const handleCancelBooking = async (bookingId) => {
+    const isConfirm = window.confirm(
+      "⚠️ CẢNH BÁO: Bạn có chắc chắn muốn hủy chuyến bay này?\n\nHành động này không thể hoàn tác. Tiền sẽ được hoàn lại vào tài khoản trong 7-14 ngày làm việc theo chính sách."
+    );
+    if (!isConfirm) return;
+
+    try {
+      const { data } = await axiosClient.put(`/api/bookings/${bookingId}/cancel`);
+      alert(data.message);
+      
+      setBookings(bookings.map(b => b._id === bookingId ? data.booking : b));
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || 'Có lỗi xảy ra khi hủy vé!');
+    }
+  };
 
   if (loading) return <div className="text-center mt-20 text-xl font-bold">Đang tải dữ liệu chuyến bay...</div>;
 
@@ -51,61 +66,113 @@ const MyFlights = () => {
             {bookings.map(booking => (
               <div key={booking._id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition">
                 
-                {/* Header Card (Mã đặt chỗ & Trạng thái) */}
-                <div className="bg-gray-800 text-white px-6 py-3 flex justify-between items-center">
-                  <div>
-                    <span className="text-sm text-gray-400">Mã đặt chỗ (PNR): </span>
-                    <span className="font-black text-yellow-400 text-lg tracking-widest">{booking.bookingCode}</span>
+                {/* HEADER: MÃ ĐẶT CHỖ & TRẠNG THÁI */}
+                <div className={`px-6 py-3 flex flex-col md:flex-row justify-between items-center ${booking.bookingStatus === 'Cancelled' ? 'bg-gray-300' : 'bg-gray-800 text-white'}`}>
+                  <div className="mb-2 md:mb-0">
+                    <span className={`text-sm ${booking.bookingStatus === 'Cancelled' ? 'text-gray-600' : 'text-gray-400'}`}>Mã đặt chỗ (PNR): </span>
+                    <span className={`font-black text-lg tracking-widest ${booking.bookingStatus === 'Cancelled' ? 'text-gray-800 line-through' : 'text-yellow-400'}`}>
+                      {booking.bookingCode}
+                    </span>
                   </div>
                   <div className="flex gap-2">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${booking.paymentStatus === 'Paid' ? 'bg-green-500' : 'bg-red-500'}`}>
-                      {booking.paymentStatus === 'Paid' ? 'Đã Thanh Toán' : 'Chưa Thanh Toán'}
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold text-white ${booking.paymentStatus === 'Paid' ? 'bg-green-500' : booking.paymentStatus === 'Refunded' ? 'bg-purple-500' : 'bg-red-500'}`}>
+                      {booking.paymentStatus === 'Paid' ? 'Đã Thanh Toán' : booking.paymentStatus === 'Refunded' ? 'Đã Hoàn Tiền' : 'Chưa Thanh Toán'}
                     </span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${booking.bookingStatus === 'Confirmed' ? 'bg-blue-500' : booking.bookingStatus === 'Pending' ? 'bg-orange-500' : 'bg-gray-500'}`}>
-                      {booking.bookingStatus === 'Confirmed' ? 'Đã Xác Nhận' : booking.bookingStatus}
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold text-white ${booking.bookingStatus === 'Confirmed' ? 'bg-blue-500' : booking.bookingStatus === 'Cancelled' ? 'bg-gray-600' : 'bg-orange-500'}`}>
+                      {booking.bookingStatus === 'Confirmed' ? 'Đã Xác Nhận' : booking.bookingStatus === 'Cancelled' ? 'Đã Hủy' : booking.bookingStatus}
                     </span>
                   </div>
                 </div>
 
-                {/* Body Card (Thông tin bay) */}
-                <div className="p-6 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div className={`p-6 flex flex-col md:flex-row gap-6 ${booking.bookingStatus === 'Cancelled' ? 'opacity-50 grayscale' : ''}`}>
                   
-                  {/* Cột trái: Giờ & Sân bay */}
-                  <div className="flex-1 flex items-center justify-between w-full">
-                    <div className="text-center">
-                      <p className="text-3xl font-black text-gray-800">
-                        {new Date(booking.flight?.departureTime).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}
-                      </p>
-                      <p className="text-sm font-bold text-gray-500">{booking.flight?.departureAirport?.code}</p>
-                      <p className="text-xs text-gray-400">{new Date(booking.flight?.departureTime).toLocaleDateString('vi-VN')}</p>
-                    </div>
-
-                    <div className="flex-1 flex flex-col items-center px-4">
-                      <span className="text-xs font-bold text-gray-400 mb-1">{booking.flight?.airline?.name} ({booking.flight?.flightNumber})</span>
-                      <div className="w-full border-b-2 border-dashed border-gray-300 relative">
-                        <span className="absolute -top-3 left-1/2 transform -translate-x-1/2 text-red-500">✈️</span>
+                  {/* CỘT TRÁI: THÔNG TIN CÁC CHUYẾN BAY */}
+                  <div className="flex-1 space-y-4">
+                    
+                    {/* CHIỀU ĐI */}
+                    <div className="flex items-center justify-between bg-blue-50 p-4 rounded-xl border border-blue-100">
+                      <div className="w-full">
+                        <p className="text-[10px] font-black text-blue-600 tracking-widest uppercase mb-2">🛫 Chiều Đi</p>
+                        <div className="flex justify-between items-center">
+                          <div className="text-center w-1/3">
+                            <p className="text-2xl font-black text-gray-800">{new Date(booking.outboundFlight?.departureTime).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}</p>
+                            <p className="font-bold text-gray-500">{booking.outboundFlight?.departureAirport?.code}</p>
+                          </div>
+                          <div className="w-1/3 flex flex-col items-center">
+                            <span className="text-[10px] font-bold text-gray-400 mb-1">{booking.outboundFlight?.flightNumber}</span>
+                            <div className="w-full border-b-2 border-dashed border-gray-300 relative">
+                              <span className="absolute -top-3 left-1/2 transform -translate-x-1/2 text-blue-400">✈️</span>
+                            </div>
+                          </div>
+                          <div className="text-center w-1/3">
+                            <p className="text-2xl font-black text-gray-800">{new Date(booking.outboundFlight?.arrivalTime).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}</p>
+                            <p className="font-bold text-gray-500">{booking.outboundFlight?.arrivalAirport?.code}</p>
+                          </div>
+                        </div>
+                        <div className="mt-2 text-center text-xs font-bold text-gray-500">
+                          {new Date(booking.outboundFlight?.departureTime).toLocaleDateString('vi-VN')} • Ghế: <span className="text-red-600">{booking.passengers[0]?.outboundSeat || '--'}</span>
+                        </div>
                       </div>
-                      <span className="text-xs text-gray-400 mt-1">Bay thẳng</span>
                     </div>
 
-                    <div className="text-center">
-                      <p className="text-3xl font-black text-gray-800">
-                        {new Date(booking.flight?.arrivalTime).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}
-                      </p>
-                      <p className="text-sm font-bold text-gray-500">{booking.flight?.arrivalAirport?.code}</p>
-                      <p className="text-xs text-gray-400">{new Date(booking.flight?.arrivalTime).toLocaleDateString('vi-VN')}</p>
-                    </div>
+                    {/* CHIỀU VỀ (Chỉ hiện nếu có) */}
+                    {booking.inboundFlight && (
+                      <div className="flex items-center justify-between bg-green-50 p-4 rounded-xl border border-green-100">
+                        <div className="w-full">
+                          <p className="text-[10px] font-black text-green-600 tracking-widest uppercase mb-2">🛬 Chiều Về</p>
+                          <div className="flex justify-between items-center">
+                            <div className="text-center w-1/3">
+                              <p className="text-2xl font-black text-gray-800">{new Date(booking.inboundFlight?.departureTime).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}</p>
+                              <p className="font-bold text-gray-500">{booking.inboundFlight?.departureAirport?.code}</p>
+                            </div>
+                            <div className="w-1/3 flex flex-col items-center">
+                              <span className="text-[10px] font-bold text-gray-400 mb-1">{booking.inboundFlight?.flightNumber}</span>
+                              <div className="w-full border-b-2 border-dashed border-gray-300 relative">
+                                <span className="absolute -top-3 left-1/2 transform -translate-x-1/2 text-green-400">✈️</span>
+                              </div>
+                            </div>
+                            <div className="text-center w-1/3">
+                              <p className="text-2xl font-black text-gray-800">{new Date(booking.inboundFlight?.arrivalTime).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}</p>
+                              <p className="font-bold text-gray-500">{booking.inboundFlight?.arrivalAirport?.code}</p>
+                            </div>
+                          </div>
+                          <div className="mt-2 text-center text-xs font-bold text-gray-500">
+                            {new Date(booking.inboundFlight?.departureTime).toLocaleDateString('vi-VN')} • Ghế: <span className="text-red-600">{booking.passengers[0]?.inboundSeat || '--'}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                   </div>
 
-                  {/* Cột phải: Tiền & Hành khách */}
-                  <div className="border-t md:border-t-0 md:border-l border-gray-200 pt-4 md:pt-0 md:pl-6 text-center md:text-right w-full md:w-auto">
-                    <p className="text-sm text-gray-500">Hành khách:</p>
-                    <p className="font-bold text-gray-800 mb-2">{booking.passengers[0]?.lastName} {booking.passengers[0]?.firstName}</p>
-                    <p className="text-sm text-gray-500">Tổng tiền:</p>
-                    <p className="text-2xl font-black text-red-600">{booking.totalAmount?.toLocaleString()} VND</p>
+                  {/* CỘT PHẢI: TÓM TẮT & HÀNH ĐỘNG */}
+                  <div className="md:w-64 border-t md:border-t-0 md:border-l border-gray-200 pt-4 md:pt-0 md:pl-6 flex flex-col justify-between">
+                    <div>
+                      <p className="text-sm text-gray-500 font-bold uppercase">Hành khách:</p>
+                      <p className="font-black text-gray-800 mb-4">{booking.passengers[0]?.lastName} {booking.passengers[0]?.firstName}</p>
+                      
+                      <p className="text-sm text-gray-500 font-bold uppercase">Tổng tiền:</p>
+                      <p className="text-2xl font-black text-red-600 mb-6">{booking.totalAmount?.toLocaleString()} đ</p>
+                    </div>
+
+                    {/* NÚT HỦY VÉ */}
+                    {booking.bookingStatus !== 'Cancelled' && !booking.isCheckedIn && (
+                      <button 
+                        onClick={() => handleCancelBooking(booking._id)}
+                        className="w-full bg-white border-2 border-red-500 text-red-600 py-3 rounded-xl font-bold hover:bg-red-50 transition shadow-sm"
+                      >
+                        ❌ HỦY CHUYẾN BAY
+                      </button>
+                    )}
+                    
+                    {booking.isCheckedIn && (
+                       <div className="bg-green-100 text-green-700 text-center py-2 rounded-xl font-bold text-sm">
+                         ✅ Đã Check-in
+                       </div>
+                    )}
                   </div>
+
                 </div>
-
               </div>
             ))}
           </div>

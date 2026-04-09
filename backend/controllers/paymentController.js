@@ -16,9 +16,9 @@ const createPaymentUrl = async (req, res) => {
     let returnUrl = process.env.VNP_RETURN_URL;
 
     // Nhận dữ liệu từ Frontend truyền lên
-    let orderId = req.body.bookingCode || moment(date).format('DDHHmmss'); // Mã đơn hàng
-    let amount = req.body.amount; // Số tiền (VND)
-    let bankCode = ''; // Để trống để khách tự chọn ngân hàng trên VNPay
+    let orderId = req.body.bookingCode || moment(date).format('DDHHmmss'); 
+    let amount = req.body.amount; 
+    let bankCode = ''; 
     
     let vnp_Params = {};
     vnp_Params['vnp_Version'] = '2.1.0';
@@ -29,7 +29,7 @@ const createPaymentUrl = async (req, res) => {
     vnp_Params['vnp_TxnRef'] = orderId;
     vnp_Params['vnp_OrderInfo'] = 'Thanh toan ve may bay FlightAir - Ma don: ' + orderId;
     vnp_Params['vnp_OrderType'] = 'billpayment';
-    vnp_Params['vnp_Amount'] = amount * 100; // VNPay yêu cầu nhân 100
+    vnp_Params['vnp_Amount'] = amount * 100; 
     vnp_Params['vnp_ReturnUrl'] = returnUrl;
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;
@@ -37,7 +37,7 @@ const createPaymentUrl = async (req, res) => {
         vnp_Params['vnp_BankCode'] = bankCode;
     }
 
-    // Sắp xếp dữ liệu theo thứ tự a-z trước khi băm (Bắt buộc của VNPay)
+    // Sắp xếp dữ liệu theo thứ tự a-z trước khi băm 
     vnp_Params = sortObject(vnp_Params);
 
     // Ký dữ liệu

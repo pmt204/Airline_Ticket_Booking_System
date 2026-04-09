@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/AuthContext";
 const Register = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState(''); // Thêm state điện thoại
+  const [phone, setPhone] = useState(''); 
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   
@@ -15,7 +15,6 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Nhớ cập nhật hàm register trong AuthContext để nhận thêm tham số phone
       await register(fullName, email, password, phone);
       navigate('/');
     } catch (err) {

@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 const AdminLayout = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const location = useLocation(); // Dùng để tô màu menu đang chọn
+  const location = useLocation();
 
   // Bảo vệ route: Nếu không phải Admin thì đuổi ra
   if (!user || user.role !== 'admin') {
@@ -36,7 +36,7 @@ const AdminLayout = () => {
         {/* Logo Admin */}
         <div className="p-6 text-center border-b border-gray-800 bg-gray-950">
           <h2 className="text-2xl font-black italic text-red-600">
-            FlightAir<span className="text-yellow-500">.com</span>
+            VietTicket<span className="text-yellow-500">.com</span>
           </h2>
           <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest">Admin Workspace</p>
         </div>
@@ -94,7 +94,7 @@ const AdminLayout = () => {
 
         {/* Khung nhúng các trang (Dashboard, Flights, Users) */}
         <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
-          <Outlet /> {/* Các trang Admin sẽ tự động chui vào đây */}
+          <Outlet /> 
         </div>
         
       </main>

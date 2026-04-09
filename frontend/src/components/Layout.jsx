@@ -48,7 +48,6 @@ const Layout = () => {
           <div>
             <h4 className="text-lg font-bold mb-4 border-b border-gray-700 pb-2 text-gray-200">Kết Nối Với Chúng Tôi</h4>
             <div className="flex gap-4 mb-6">
-              {/* Icon mạng xã hội (Dùng emoji hoặc icon SVG tùy bạn) */}
               <a href="#" className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition font-bold text-white">f</a>
               <a href="#" className="w-10 h-10 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-full flex items-center justify-center hover:opacity-80 transition font-bold text-white">ig</a>
               <a href="#" className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition font-bold text-white">▶</a>

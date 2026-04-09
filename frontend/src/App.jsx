@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import AdminLayout from './components/AdminLayout';
+import ZaloWidget from './components/ZaloWidget';
 
-// IMPORT TRANG AUTH 
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 
@@ -14,6 +14,8 @@ import Checkout from './pages/Checkout';
 import PaymentSuccess from './pages/PaymentSuccess';
 import MyFlights from './pages/MyFlights';
 import OnlineCheckin from './pages/OnlineCheckin';
+import RoundTripDetails from './pages/RoundTripDetails';
+import BookingDetails from './pages/BookingDetails';
 
 import AdminUsers from './pages/Admin/AdminUsers';
 import AdminFlights from './pages/Admin/AdminFlights';
@@ -39,6 +41,8 @@ function App() {
           <Route path="/payment/success" element={<PaymentSuccess />} />
           <Route path="/my-flights" element={<MyFlights />} />
           <Route path="/checkin" element={<OnlineCheckin />} />
+          <Route path="/flight/roundtrip" element={<RoundTripDetails />} />
+          <Route path="/booking/:id" element={<BookingDetails />} />
         </Route>
 
         {/* LUỒNG 2: ADMIN (Dùng AdminLayout) */}
@@ -53,6 +57,7 @@ function App() {
         </Route>
 
       </Routes>
+      <ZaloWidget />
     </Router>
   );
 }

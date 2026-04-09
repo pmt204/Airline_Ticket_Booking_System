@@ -6,10 +6,6 @@ const Airport = require('../models/Airport');
 const Flight = require('../models/Flight');
 const Booking = require('../models/Booking');
 const Voucher = require('../models/Voucher');
-const Faq = require('../models/Faq');
-const ContactMessage = require('../models/ContactMessage');
-const ChatMessage = require('../models/ChatMessage');
-
 const router = express.Router();
 
 router.get('/users', async (req, res) => {
@@ -224,61 +220,6 @@ router.post('/vouchers/validate', async (req, res) => {
     : Number(voucher.discountValue);
 
   res.json({ valid: true, code: voucher.code, discount, finalAmount: Math.max(Number(amount) - discount, 0) });
-});
-
-router.get('/faqs', async (req, res) => {
-  const data = await Faq.find().sort({ createdAt: -1 }).lean();
-  res.json(data);
-});
-
-router.post('/faqs', async (req, res) => {
-  const created = await Faq.create(req.body);
-  res.status(201).json(created);
-});
-
-router.put('/faqs/:id', async (req, res) => {
-  const updated = await Faq.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-  res.json(updated);
-});
-
-router.delete('/faqs/:id', async (req, res) => {
-  await Faq.findByIdAndDelete(req.params.id);
-  res.json({ success: true });
-});
-
-router.get('/contacts', async (req, res) => {
-  const data = await ContactMessage.find().sort({ createdAt: -1 }).lean();
-  res.json(data);
-});
-
-router.post('/contacts', async (req, res) => {
-  const created = await ContactMessage.create(req.body);
-  res.status(201).json(created);
-});
-
-router.put('/contacts/:id', async (req, res) => {
-  const updated = await ContactMessage.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-  res.json(updated);
-});
-
-router.delete('/contacts/:id', async (req, res) => {
-  await ContactMessage.findByIdAndDelete(req.params.id);
-  res.json({ success: true });
-});
-
-router.get('/chats', async (req, res) => {
-  const data = await ChatMessage.find().sort({ createdAt: 1 }).lean();
-  res.json(data);
-});
-
-router.post('/chats', async (req, res) => {
-  const created = await ChatMessage.create(req.body);
-  res.status(201).json(created);
-});
-
-router.delete('/chats/:id', async (req, res) => {
-  await ChatMessage.findByIdAndDelete(req.params.id);
-  res.json({ success: true });
 });
 
 module.exports = router;

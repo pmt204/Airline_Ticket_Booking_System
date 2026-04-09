@@ -7,10 +7,8 @@ const AdminFlights = () => {
   const [airlines, setAirlines] = useState([]);
   const [reload, setReload] = useState(false);
 
-  // State cho tạo mới
   const [newFlight, setNewFlight] = useState({ flightNumber: '', airline: '', departureAirport: '', arrivalAirport: '', departureTime: '', arrivalTime: '', basePrice: '', seatCapacity: '' });
   
-  // State cho việc Chỉnh sửa
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({ basePrice: '', status: '' });
 
@@ -57,7 +55,7 @@ const AdminFlights = () => {
     <div className="max-w-7xl mx-auto p-6">
       <h2 className="text-2xl font-bold text-primary mb-6">Quản lý Chuyến bay</h2>
       
-      {/* KHU VỰC THÊM CHUYẾN BAY (Giữ nguyên như cũ) */}
+      {/* KHU VỰC THÊM CHUYẾN BAY */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h3 className="text-lg font-bold mb-4">Thêm chuyến bay mới</h3>
         <form onSubmit={handleCreateFlight} className="grid grid-cols-1 md:grid-cols-4 gap-4">

@@ -3,7 +3,7 @@ import axiosClient from '../../api/axiosClient';
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
-  const [reload, setReload] = useState(false); // Biến trigger để tải lại dữ liệu
+  const [reload, setReload] = useState(false); 
 
   useEffect(() => {
     // Đưa hàm fetch vào hẳn bên trong useEffect để linter không báo lỗi
@@ -17,7 +17,7 @@ const AdminUsers = () => {
     };
 
     fetchUsers();
-  }, [reload]); // Mỗi khi biến 'reload' thay đổi, useEffect sẽ tự chạy lại
+  }, [reload]); 
 
   const handleToggleStatus = async (id, role) => {
     if (role === 'admin') {
@@ -26,9 +26,9 @@ const AdminUsers = () => {
     }
     try {
       await axiosClient.put(`/api/users/toggle-status/${id}`);
-      setReload(!reload); // Đảo ngược giá trị để kích hoạt useEffect tải lại bảng
+      setReload(!reload); 
     } catch (err) {
-      console.error(err); // Đã sử dụng biến err để sửa lỗi no-unused-vars
+      console.error(err);
       alert('Có lỗi xảy ra!');
     }
   };

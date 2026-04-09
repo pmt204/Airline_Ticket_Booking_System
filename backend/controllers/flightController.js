@@ -2,9 +2,7 @@ const Flight = require('../models/Flight');
 const Airport = require('../models/Airport');
 const Airline = require('../models/Airline');
 
-// ==========================================
-// CHỨC NĂNG 1: QUẢN LÝ SÂN BAY & HÃNG BAY (Admin + Public)
-// ==========================================
+// CHỨC NĂNG 1: QUẢN LÝ SÂN BAY & HÃNG BAY 
 const getAirports = async (req, res) => {
   try { res.json(await Airport.find({})); } 
   catch (error) { res.status(500).json({ message: 'Lỗi lấy sân bay' }); }
@@ -25,16 +23,14 @@ const createAirline = async (req, res) => {
   catch (error) { res.status(400).json({ message: 'Lỗi tạo hãng bay', error: error.message }); }
 };
 
-// ==========================================
-// CHỨC NĂNG 2: QUẢN LÝ CHUYẾN BAY (Admin)
-// ==========================================
+// CHỨC NĂNG 2: QUẢN LÝ CHUYẾN BAY 
 const getAllFlights = async (req, res) => {
   try {
     const flights = await Flight.find({})
       .populate('airline', 'name code')
       .populate('departureAirport', 'name code city')
       .populate('arrivalAirport', 'name code city')
-      .sort({ createdAt: -1 }); // Mới nhất xếp lên đầu
+      .sort({ createdAt: -1 });
     res.json(flights);
   } catch (error) {
     res.status(500).json({ message: 'Lỗi lấy danh sách chuyến bay' });
@@ -57,9 +53,7 @@ const deleteFlight = async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Lỗi xóa chuyến bay' }); }
 };
 
-// ==========================================
 // CHỨC NĂNG 3: CẤU HÌNH GIÁ VÀ CHỖ NGỒI (Admin)
-// ==========================================
 const updateFlightPricing = async (req, res) => {
   try {
     const { basePrice, status } = req.body;
@@ -74,19 +68,16 @@ const updateFlightPricing = async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Lỗi cập nhật giá' }); }
 };
 
-// ==========================================
 // CHỨC NĂNG 4: TÌM KIẾM, LỌC & SẮP XẾP (Public)
-// ==========================================
 const searchFlights = async (req, res) => {
   try {
     const { dep, arr, date, minPrice, maxPrice, airline, sort } = req.query;
-    let query = { status: 'Scheduled' }; // Chỉ tìm chuyến bay sắp cất cánh
-
+    let query = { status: 'Scheduled' }; 
     // Lọc theo Nơi đi, Nơi đến
     if (dep) query.departureAirport = dep;
     if (arr) query.arrivalAirport = arr;
 
-    // Lọc theo Ngày bay (Tìm trong khoảng từ 0h00 đến 23h59 của ngày đó)
+    // Lọc theo Ngày bay 
     if (date) {
       const searchDate = new Date(date);
       const nextDate = new Date(searchDate);
@@ -105,7 +96,7 @@ const searchFlights = async (req, res) => {
     if (airline) query.airline = airline;
 
     // Xử lý Sắp xếp (Sort)
-    let sortObj = { departureTime: 1 }; // Mặc định sắp xếp giờ bay tăng dần
+    let sortObj = { departureTime: 1 }; 
     if (sort === 'price_asc') sortObj = { basePrice: 1 };
     if (sort === 'price_desc') sortObj = { basePrice: -1 };
     if (sort === 'time_desc') sortObj = { departureTime: -1 };
@@ -121,9 +112,7 @@ const searchFlights = async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Lỗi tìm kiếm chuyến bay', error: error.message }); }
 };
 
-// ==========================================
-// CHỨC NĂNG 5: XEM CHI TIẾT CHUYẾN BAY (Public)
-// ==========================================
+// CHỨC NĂNG 5: XEM CHI TIẾT CHUYẾN BAY 
 const getFlightById = async (req, res) => {
   try {
     const flight = await Flight.findById(req.params.id)
@@ -136,15 +125,13 @@ const getFlightById = async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Lỗi lấy chi tiết chuyến bay' }); }
 };
 
-// ==========================================
-// CHỨC NĂNG 6: DỮ LIỆU SƠ ĐỒ CHỖ NGỒI (Public)
-// ==========================================
+
+// CHỨC NĂNG 6: DỮ LIỆU SƠ ĐỒ CHỖ NGỒI 
 const getSeatMap = async (req, res) => {
   try {
     const flight = await Flight.findById(req.params.id).select('seatCapacity bookedSeats');
     if (!flight) return res.status(404).json({ message: 'Không tìm thấy chuyến bay' });
 
-    // Trả về tổng số ghế và danh sách các mã ghế đã có người đặt (VD: ['1A', '2B'])
     res.json({
       seatCapacity: flight.seatCapacity,
       bookedSeats: flight.bookedSeats,
@@ -153,9 +140,7 @@ const getSeatMap = async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Lỗi lấy sơ đồ ghế' }); }
 };
 
-// ==========================================
-// CHỨC NĂNG 7: BẬT/TẮT TRẠNG THÁI (ADMIN)
-// ==========================================
+// CHỨC NĂNG 7: BẬT/TẮT TRẠNG THÁI 
 
 // Bật/tắt Hãng bay
 const toggleAirlineStatus = async (req, res) => {
@@ -163,7 +148,7 @@ const toggleAirlineStatus = async (req, res) => {
     const airline = await Airline.findById(req.params.id);
     if (!airline) return res.status(404).json({ message: 'Không tìm thấy hãng bay' });
     
-    airline.isActive = !airline.isActive; // Đảo ngược: Đang true thành false và ngược lại
+    airline.isActive = !airline.isActive; 
     await airline.save();
     res.json({ message: `Đã ${airline.isActive ? 'mở khóa' : 'khóa'} hãng bay thành công!`, airline });
   } catch (error) { res.status(500).json({ message: 'Lỗi cập nhật trạng thái hãng bay' }); }
@@ -181,6 +166,28 @@ const toggleAirportStatus = async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Lỗi cập nhật trạng thái sân bay' }); }
 };
 
+const updateFlightPrice = async (req, res) => {
+  try {
+    const { basePrice, businessMultiplier, premiumMultiplier } = req.body;
+    
+    const flight = await Flight.findById(req.params.id);
+    if (!flight) return res.status(404).json({ message: 'Không tìm thấy chuyến bay' });
+
+    flight.basePrice = basePrice;
+    flight.classMultipliers = {
+      business: businessMultiplier,
+      premium: premiumMultiplier,
+      economy: 1.0
+    };
+
+    await flight.save();
+    res.json({ message: 'Cập nhật giá và hạng vé thành công!', flight });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Lỗi cập nhật giá vé.' });
+  }
+};
+
 module.exports = {
   getAirports, 
   createAirport,
@@ -194,5 +201,6 @@ module.exports = {
   getFlightById, 
   getSeatMap,
   toggleAirlineStatus,
-  toggleAirportStatus
+  toggleAirportStatus,
+  updateFlightPrice
 };

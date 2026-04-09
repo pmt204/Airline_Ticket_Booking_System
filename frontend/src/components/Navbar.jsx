@@ -7,7 +7,7 @@ const Navbar = () => {
 
   return (
     <header className="w-full">
-      {/* TẦNG 1: Menu phụ (Hỗ trợ, Ngôn ngữ, Đăng nhập) - Nền xám nhạt */}
+      {/* TẦNG 1: Menu phụ (Hỗ trợ, Ngôn ngữ, Đăng nhập)  */}
       <div className="bg-gray-200 text-gray-700 text-sm py-1 px-4 flex justify-end items-center gap-4">
         <span className="cursor-pointer hover:text-red-600">🎧 Hỗ trợ</span>
         <span>|</span>
@@ -29,7 +29,7 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* TẦNG 2: Menu chính (Logo và các dịch vụ) - Nền đỏ / trắng */}
+      {/* TẦNG 2: Menu chính (Logo và các dịch vụ)*/}
       <div className="bg-white shadow-md py-3 px-6 flex justify-between items-center">
         {/* LOGO */}
         <Link to="/" className="text-3xl font-black text-red-600 italic tracking-tighter">
@@ -41,7 +41,7 @@ const Navbar = () => {
           <Link to="/" className="text-red-600 border-b-2 border-red-600 pb-1">ĐẶT VÉ</Link>
           <Link to="/my-flights" className="hover:text-red-600 font-bold transition">CHUYẾN BAY CỦA TÔI</Link>
           <Link to="/checkin" className="hover:text-red-600 font-bold transition">ONLINE CHECK-IN</Link>          
-          {/* MENU ADMIN (Chỉ hiện khi là Admin) */}
+          {/* MENU ADMIN */}
           {user?.role === 'admin' && (
             <div className="flex gap-4 ml-4 pl-4 border-l-2 border-gray-300">
               <Link to="/admin" className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm hover:bg-black transition flex items-center gap-2">

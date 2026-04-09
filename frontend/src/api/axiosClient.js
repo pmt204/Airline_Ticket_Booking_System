@@ -7,7 +7,6 @@ const axiosClient = axios.create({
   },
 });
 
-// Bạn có thể thêm Interceptors ở đây sau này để tự động gắn Token (JWT) vào mỗi request
 axiosClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {

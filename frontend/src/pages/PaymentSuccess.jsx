@@ -13,7 +13,6 @@ const PaymentSuccess = () => {
 
       if (vnp_ResponseCode === '00') {
         try {
-          // GỌI BACKEND CẬP NHẬT DB VÀ GỬI MAIL!
           await axiosClient.post('/api/bookings/confirm', { bookingCode: vnp_TxnRef });
           setStatus('success');
         } catch (error) {
@@ -52,7 +51,6 @@ const PaymentSuccess = () => {
               </p>
               <p>
                 <span className="text-gray-500">Số tiền:</span> 
-                {/* VNPay trả về số tiền nhân 100, nên ta chia lại 100 để hiển thị */}
                 <span className="font-bold text-red-600 ml-2">
                   {(Number(searchParams.get('vnp_Amount')) / 100).toLocaleString()} VND
                 </span>

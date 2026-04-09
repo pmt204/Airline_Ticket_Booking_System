@@ -8,13 +8,11 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Kiểm tra xem có token trong máy không mỗi khi mở web
   useEffect(() => {
     const checkUserLoggedIn = async () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          // Nếu có token, gọi API lấy thông tin profile
           const { data } = await axiosClient.get('/api/auth/profile');
           setUser(data);
         } catch (error) {
@@ -30,8 +28,8 @@ export const AuthProvider = ({ children }) => {
   // Hàm Đăng nhập
   const login = async (email, password) => {
     const { data } = await axiosClient.post('/api/auth/login', { email, password });
-    localStorage.setItem('token', data.token); // Lưu chìa khóa vào trình duyệt
-    setUser(data); // Cập nhật state
+    localStorage.setItem('token', data.token); 
+    setUser(data);
     return data;
   };
 
