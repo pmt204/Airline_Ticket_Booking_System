@@ -153,9 +153,46 @@ const getSeatMap = async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Lỗi lấy sơ đồ ghế' }); }
 };
 
+// ==========================================
+// CHỨC NĂNG 7: BẬT/TẮT TRẠNG THÁI (ADMIN)
+// ==========================================
+
+// Bật/tắt Hãng bay
+const toggleAirlineStatus = async (req, res) => {
+  try {
+    const airline = await Airline.findById(req.params.id);
+    if (!airline) return res.status(404).json({ message: 'Không tìm thấy hãng bay' });
+    
+    airline.isActive = !airline.isActive; // Đảo ngược: Đang true thành false và ngược lại
+    await airline.save();
+    res.json({ message: `Đã ${airline.isActive ? 'mở khóa' : 'khóa'} hãng bay thành công!`, airline });
+  } catch (error) { res.status(500).json({ message: 'Lỗi cập nhật trạng thái hãng bay' }); }
+};
+
+// Bật/tắt Sân bay
+const toggleAirportStatus = async (req, res) => {
+  try {
+    const airport = await Airport.findById(req.params.id);
+    if (!airport) return res.status(404).json({ message: 'Không tìm thấy sân bay' });
+    
+    airport.isActive = !airport.isActive;
+    await airport.save();
+    res.json({ message: `Đã ${airport.isActive ? 'mở khóa' : 'khóa'} sân bay thành công!`, airport });
+  } catch (error) { res.status(500).json({ message: 'Lỗi cập nhật trạng thái sân bay' }); }
+};
+
 module.exports = {
-  getAirports, createAirport,
-  getAirlines, createAirline,
-  createFlight, deleteFlight, updateFlightPricing,
-  searchFlights, getFlightById, getSeatMap
+  getAirports, 
+  createAirport,
+  getAirlines, 
+  createAirline,
+  getAllFlights, 
+  createFlight, 
+  deleteFlight, 
+  updateFlightPricing,
+  searchFlights, 
+  getFlightById, 
+  getSeatMap,
+  toggleAirlineStatus,
+  toggleAirportStatus
 };

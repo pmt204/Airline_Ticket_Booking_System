@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axiosClient from '../api/axiosClient';
+import axiosClient from '../../api/axiosClient';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({ totalBookings: 0, totalFlights: 0, totalUsers: 0, revenue: 0 });

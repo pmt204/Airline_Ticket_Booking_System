@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axiosClient from '../api/axiosClient';
+import axiosClient from '../../api/axiosClient';
 
 const AdminFlights = () => {
   const [flights, setFlights] = useState([]);
