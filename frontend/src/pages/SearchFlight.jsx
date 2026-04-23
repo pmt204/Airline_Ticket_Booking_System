@@ -52,7 +52,6 @@ const SearchFlight = () => {
         const type = searchParamsURL.get('type');
         const airline = searchParamsURL.get('airline');
 
-        // 1. TÌM CHIỀU ĐI
         const queryOut = new URLSearchParams();
         if (dep) queryOut.append('dep', dep);
         if (arr) queryOut.append('arr', arr);
@@ -61,7 +60,6 @@ const SearchFlight = () => {
         const outRes = await axiosClient.get(`/api/flights/search?${queryOut.toString()}`);
         setOutboundFlights(outRes.data);
 
-        // 2. TÌM CHIỀU VỀ 
         if (type === 'round-trip' && returnDate) {
           const queryIn = new URLSearchParams();
           if (arr) queryIn.append('dep', arr); 
@@ -225,12 +223,10 @@ const SearchFlight = () => {
                 .filter(f => {
                   if (!selectedOutbound) return true; 
 
-                  // 1. LOGIC TUYẾN BAY: Đảo ngược Khởi hành và Điểm đến
                   const isReverseRoute = 
                     f.departureAirport?.code === selectedOutbound.arrivalAirport?.code &&
                     f.arrivalAirport?.code === selectedOutbound.departureAirport?.code;
 
-                  // 2. LOGIC THỜI GIAN: Chuyến về cất cánh sau khi chuyến đi hạ cánh 2 tiếng
                   const isValidTime = 
                     new Date(f.departureTime).getTime() >= new Date(selectedOutbound.arrivalTime).getTime() + (2 * 3600000);
 
@@ -242,7 +238,6 @@ const SearchFlight = () => {
         )}
       </div>
 
-      {/* THANH THANH TOÁN TẠM TÍNH DƯỚI CÙNG */}
       {localParams.type === 'round-trip' && (selectedOutbound || selectedInbound) && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-[0_-10px_30px_rgba(0,0,0,0.1)] z-50">
           <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center gap-4">

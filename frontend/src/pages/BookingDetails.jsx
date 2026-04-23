@@ -11,7 +11,6 @@ const BookingDetails = () => {
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        // Backend của chúng ta đã có sẵn hàm getTicketDetails ở router.get('/:id')
         const { data } = await axiosClient.get(`/api/bookings/${id}`);
         setBooking(data);
       } catch (err) {
@@ -30,7 +29,7 @@ const BookingDetails = () => {
       try {
         const { data } = await axiosClient.put(`/api/bookings/${id}/cancel`);
         alert(data.message);
-        window.location.reload(); // Tải lại trang để cập nhật trạng thái
+        window.location.reload(); 
       } catch (err) {
         alert(err.response?.data?.message || 'Có lỗi xảy ra khi hủy vé!');
       }
@@ -44,7 +43,6 @@ const BookingDetails = () => {
     <div className="bg-gray-50 min-h-screen py-10">
       <div className="max-w-4xl mx-auto px-4">
         
-        {/* Nút quay lại & Tiêu đề */}
         <div className="flex items-center gap-4 mb-6">
           <button onClick={() => navigate(-1)} className="bg-white border border-gray-300 p-2 rounded-lg hover:bg-gray-100 transition">
             ⬅️ Quay lại
@@ -52,7 +50,6 @@ const BookingDetails = () => {
           <h2 className="text-2xl font-black text-gray-800">Chi Tiết Đơn Đặt Vé</h2>
         </div>
 
-        {/* THÔNG TIN CHUNG (TRẠNG THÁI & MÃ PNR) */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
           <div className="bg-gray-800 p-6 flex flex-col md:flex-row justify-between items-center text-white">
             <div>
@@ -83,13 +80,10 @@ const BookingDetails = () => {
           </div>
         </div>
 
-        {/* LỊCH TRÌNH CHUYẾN BAY */}
         <h3 className="text-xl font-black text-gray-800 mb-4 border-l-4 border-red-600 pl-3">Hành Trình Bay</h3>
         
-        {/* Lớp mờ nếu vé đã bị hủy */}
         <div className={`space-y-6 ${booking.bookingStatus === 'Cancelled' ? 'opacity-50 grayscale' : ''}`}>
           
-          {/* CHIỀU ĐI */}
           {booking.outboundFlight && (
             <div className="bg-white rounded-2xl shadow-sm border border-blue-200 overflow-hidden">
               <div className="bg-blue-50 px-6 py-3 border-b border-blue-100 flex justify-between items-center">
@@ -121,7 +115,6 @@ const BookingDetails = () => {
             </div>
           )}
 
-          {/* CHIỀU VỀ */}
           {booking.inboundFlight && (
             <div className="bg-white rounded-2xl shadow-sm border border-green-200 overflow-hidden">
               <div className="bg-green-50 px-6 py-3 border-b border-green-100 flex justify-between items-center">
@@ -155,7 +148,6 @@ const BookingDetails = () => {
 
         </div>
 
-        {/* KHU VỰC HÀNH ĐỘNG (NÚT HỦY / CHECKIN) */}
         <div className="mt-8 flex flex-col md:flex-row justify-end gap-4">
           {booking.bookingStatus === 'Confirmed' && !booking.isCheckedIn && (
             <button onClick={() => navigate('/checkin')} className="bg-blue-600 text-white font-bold px-8 py-3 rounded-xl hover:bg-blue-700 shadow-md">

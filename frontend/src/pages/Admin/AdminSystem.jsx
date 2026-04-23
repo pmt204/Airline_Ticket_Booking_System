@@ -43,7 +43,6 @@ const AdminSystem = () => {
     } catch (err) { alert('Lỗi khi thêm Hãng bay (Mã hãng có thể bị trùng)!'); console.error(err); }
   };
 
-  // 2 Hàm xử lý Bật/Tắt trạng thái
   const handleToggleAirport = async (id) => {
     try {
       await axiosClient.put(`/api/flights/airports/${id}/status`);
@@ -64,7 +63,6 @@ const AdminSystem = () => {
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
-        {/* KHỐI SÂN BAY */}
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <h3 className="text-lg font-bold text-blue-600 mb-4">🛫 Quản lý Sân bay</h3>
           
@@ -107,7 +105,6 @@ const AdminSystem = () => {
           </div>
         </div>
 
-        {/* KHỐI HÃNG BAY */}
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <h3 className="text-lg font-bold text-red-600 mb-4">✈️ Quản lý Hãng bay</h3>
           

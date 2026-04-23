@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import axiosClient from '../api/axiosClient';
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -25,7 +24,6 @@ export const AuthProvider = ({ children }) => {
     checkUserLoggedIn();
   }, []);
 
-  // Hàm Đăng nhập
   const login = async (email, password) => {
     const { data } = await axiosClient.post('/api/auth/login', { email, password });
     localStorage.setItem('token', data.token); 
@@ -33,7 +31,6 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  // Hàm Đăng ký
   const register = async (fullName, email, password) => {
     const { data } = await axiosClient.post('/api/auth/register', { fullName, email, password });
     localStorage.setItem('token', data.token);
@@ -41,7 +38,6 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  // Hàm Đăng xuất
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);

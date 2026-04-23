@@ -27,7 +27,6 @@ const OnlineCheckin = () => {
     window.print(); 
   };
 
-  // HÀM VẼ GIAO DIỆN 1 TẤM VÉ 
   const renderBoardingPassCard = (flight, seat, typeLabel) => {
     if (!flight) return null;
     const passenger = boardingPass.passengers[0];
@@ -35,14 +34,11 @@ const OnlineCheckin = () => {
     return (
       <div className="bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-gray-200 mb-10 relative print-page-break">
         
-        {/* Nhãn phân biệt Chiều đi / Chiều về */}
         <div className="absolute top-0 left-0 bg-red-600 text-white px-4 py-1 rounded-br-lg font-black text-xs uppercase tracking-widest z-10 shadow-md">
           {typeLabel}
         </div>
 
-        {/* Phần thân vé (Bên trái) */}
         <div className="flex-1 p-8 pt-10 relative">
-          {/* Header của vé */}
           <div className="flex justify-between items-center border-b-2 border-gray-800 pb-4 mb-6">
             <div>
               <h1 className="text-3xl font-black text-blue-900 italic tracking-tighter">VietTicket</h1>
@@ -51,7 +47,6 @@ const OnlineCheckin = () => {
             <img src={flight.airline?.logoUrl} alt="Airline" className="h-10 mix-blend-multiply" onError={e => e.target.style.display='none'}/>
           </div>
 
-          {/* Thông tin khách hàng */}
           <div className="flex justify-between mb-8">
             <div>
               <p className="text-xs text-gray-500 uppercase font-bold">Tên Hành Khách / Passenger Name</p>
@@ -63,7 +58,6 @@ const OnlineCheckin = () => {
             </div>
           </div>
 
-          {/* Hành trình */}
           <div className="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-100 mb-8">
             <div className="w-1/3">
               <p className="text-xs text-gray-500 uppercase font-bold">Từ / From</p>
@@ -83,7 +77,6 @@ const OnlineCheckin = () => {
             </div>
           </div>
 
-          {/* Chi tiết Giờ bay & Ghế */}
           <div className="flex justify-between gap-4">
             <div className="flex-1 bg-blue-50 p-3 rounded-lg border border-blue-100">
               <p className="text-[10px] text-gray-500 uppercase font-bold">Ngày / Date</p>
@@ -102,7 +95,6 @@ const OnlineCheckin = () => {
           </div>
         </div>
 
-        {/* Phần xé vé (Bên phải) */}
         <div className="md:w-64 bg-gray-50 p-8 border-t-2 md:border-t-0 md:border-l-2 border-dashed border-gray-300 flex flex-col items-center justify-center relative">
           <div className="hidden md:block absolute -left-3 top-[-10px] w-6 h-6 bg-gray-50 rounded-full border-b border-gray-200"></div>
           <div className="hidden md:block absolute -left-3 bottom-[-10px] w-6 h-6 bg-gray-50 rounded-full border-t border-gray-200"></div>
@@ -161,14 +153,12 @@ const OnlineCheckin = () => {
           </div>
 
           <div id="print-area">
-            {/* Gọi hàm in thẻ cho Chuyến Đi */}
             {renderBoardingPassCard(
               boardingPass.outboundFlight, 
               boardingPass.passengers[0]?.outboundSeat, 
               "🛫 Chuyến Đi"
             )}
 
-            {/* Gọi hàm in thẻ cho Chuyến Về */}
             {boardingPass.inboundFlight && renderBoardingPassCard(
               boardingPass.inboundFlight, 
               boardingPass.passengers[0]?.inboundSeat, 

@@ -3,7 +3,6 @@ const Flight = require('../models/Flight');
 const User = require('../models/User'); 
 const nodemailer = require('nodemailer');
 
-// HÀM PHỤ TRỢ: GỬI EMAIL E-TICKET
 const sendETicketEmail = async (passengerEmail, booking) => {
   try {
     const transporter = nodemailer.createTransport({
@@ -11,7 +10,6 @@ const sendETicketEmail = async (passengerEmail, booking) => {
       auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
     });
 
-    // Tạo chuỗi HTML linh động (Nếu có chuyến về thì in thêm chuyến về)
     const inboundHtml = booking.inboundFlight ? `
       <div style="background-color: #f7fafc; padding: 15px; border-radius: 5px; margin: 10px 0;">
         <p style="color: #2b6cb0; font-weight: bold; margin-bottom: 5px;">🛬 CHUYẾN VỀ</p>
@@ -53,19 +51,16 @@ const sendETicketEmail = async (passengerEmail, booking) => {
   } catch (error) { console.error('Lỗi khi gửi Email:', error); }
 };
 
-// 1. TẠO ĐƠN ĐẶT VÉ (Hỗ trợ 1 chiều và Khứ hồi)
 const createBooking = async (req, res) => {
   try {
     const { outboundFlightId, inboundFlightId, userId, passengers, totalAmount } = req.body;
 
-    // Trừ ghế chiều đi
     const outFlight = await Flight.findById(outboundFlightId);
     if (!outFlight) return res.status(404).json({ message: 'Không tìm thấy chuyến đi' });
     passengers.forEach(p => { if(p.outboundSeat) outFlight.bookedSeats.push(p.outboundSeat); });
     outFlight.availableSeats -= passengers.length;
     await outFlight.save();
 
-    // Trừ ghế chiều về (nếu có)
     if (inboundFlightId) {
       const inFlight = await Flight.findById(inboundFlightId);
       if (!inFlight) return res.status(404).json({ message: 'Không tìm thấy chuyến về' });
@@ -87,11 +82,9 @@ const createBooking = async (req, res) => {
   } catch (err) { res.status(500).json({ message: 'Lỗi khi đặt vé' }); }
 };
 
-// 2. XÁC NHẬN THANH TOÁN VÀ GỬI MAIL
 const confirmVNPayPayment = async (req, res) => {
   try {
     const { bookingCode } = req.body;
-    // FIX: Populate cả 2 chiều
     const booking = await Booking.findOne({ bookingCode })
       .populate('outboundFlight')
       .populate('inboundFlight');
@@ -109,10 +102,8 @@ const confirmVNPayPayment = async (req, res) => {
   } catch (err) { res.status(500).json({ message: 'Lỗi xác nhận thanh toán' }); }
 };
 
-// 3. ADMIN: QUẢN LÝ TẤT CẢ VÉ
 const getAllBookings = async (req, res) => {
   try {
-    // FIX: Đổi 'flight' thành 'outboundFlight' và 'inboundFlight'
     const bookings = await Booking.find()
       .populate('outboundFlight', 'flightNumber departureTime arrivalTime')
       .populate('inboundFlight', 'flightNumber departureTime arrivalTime')
@@ -122,7 +113,6 @@ const getAllBookings = async (req, res) => {
   } catch (err) { res.status(500).json({ message: 'Lỗi lấy danh sách vé' }); }
 };
 
-// 4. ADMIN: CẬP NHẬT TRẠNG THÁI VÉ
 const updateBookingStatus = async (req, res) => {
   try {
     const { status } = req.body; 
@@ -134,7 +124,6 @@ const updateBookingStatus = async (req, res) => {
   } catch (err) { res.status(500).json({ message: 'Lỗi cập nhật' }); }
 };
 
-// 5. ADMIN: THỐNG KÊ DASHBOARD
 const getDashboardStats = async (req, res) => {
   try {
     const totalBookings = await Booking.countDocuments();
@@ -150,7 +139,6 @@ const getDashboardStats = async (req, res) => {
   } catch (err) { res.json({ totalBookings: 0, totalFlights: 0, totalUsers: 0, revenue: 0 }); }
 };
 
-// 6. KHÁCH HÀNG: LẤY VÉ CÁ NHÂN (Trang Profile / MyFlights)
 const getMyBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ user: req.user._id })
@@ -161,7 +149,6 @@ const getMyBookings = async (req, res) => {
   } catch (err) { res.status(500).json({ message: 'Lỗi lấy chuyến bay cá nhân' }); }
 };
 
-// 7. E-TICKET DETAIL
 const getTicketDetails = async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id)
@@ -171,7 +158,6 @@ const getTicketDetails = async (req, res) => {
   } catch (err) { res.status(500).json({ message: 'Lỗi lấy E-Ticket' }); }
 };
 
-// 8. ONLINE CHECK-IN
 const onlineCheckin = async (req, res) => {
   try {
     const { bookingCode, lastName } = req.body;
@@ -193,7 +179,6 @@ const onlineCheckin = async (req, res) => {
   } catch (err) { res.status(500).json({ message: 'Lỗi hệ thống khi check-in.' }); }
 };
 
-// 9. KHÁCH HÀNG / ADMIN: HỦY VÉ (CHUẨN NGHIỆP VỤ)
 const cancelBooking = async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id)
@@ -202,7 +187,6 @@ const cancelBooking = async (req, res) => {
 
     if (!booking) return res.status(404).json({ message: 'Không tìm thấy vé' });
 
-    // QUY TẮC 1: Đã Check-in hoặc Đã hủy thì không cho thao tác tiếp
     if (booking.bookingStatus === 'Cancelled') {
       return res.status(400).json({ message: 'Vé này đã được hủy từ trước.' });
     }
@@ -210,7 +194,6 @@ const cancelBooking = async (req, res) => {
       return res.status(400).json({ message: 'Không thể hủy vé vì hành khách đã làm thủ tục (Check-in).' });
     }
 
-    // QUY TẮC 2: Rào cản 24 giờ (Chỉ xét chuyến đi đầu tiên)
     const timeToDeparture = new Date(booking.outboundFlight.departureTime).getTime() - new Date().getTime();
     const hoursToDeparture = timeToDeparture / (1000 * 60 * 60);
     
@@ -218,8 +201,6 @@ const cancelBooking = async (req, res) => {
       return res.status(400).json({ message: 'Chỉ được phép hủy vé trước giờ khởi hành ít nhất 24 tiếng.' });
     }
 
-    // QUY TẮC 3: GIẢI PHÓNG GHẾ (Trả lại cho máy bay)
-    // 3.1. Nhả ghế chuyến đi
     const outFlight = await Flight.findById(booking.outboundFlight._id);
     const outSeatsToRelease = booking.passengers.map(p => p.outboundSeat).filter(Boolean);
     
@@ -227,7 +208,6 @@ const cancelBooking = async (req, res) => {
     outFlight.availableSeats += outSeatsToRelease.length;
     await outFlight.save();
 
-    // 3.2. Nhả ghế chuyến về (nếu là vé khứ hồi)
     if (booking.inboundFlight) {
       const inFlight = await Flight.findById(booking.inboundFlight._id);
       const inSeatsToRelease = booking.passengers.map(p => p.inboundSeat).filter(Boolean);
@@ -237,7 +217,6 @@ const cancelBooking = async (req, res) => {
       await inFlight.save();
     }
 
-    // QUY TẮC 4: CẬP NHẬT TRẠNG THÁI TIỀN
     booking.bookingStatus = 'Cancelled';
     if (booking.paymentStatus === 'Paid') {
       booking.paymentStatus = 'Refunded'; 
@@ -259,7 +238,6 @@ const submitReview = async (req, res) => {
 
     if (!booking) return res.status(404).json({ message: 'Không tìm thấy vé' });
     
-    // Khóa bảo mật: Chỉ cho phép đánh giá nếu đã bay xong
     if (booking.bookingStatus !== 'Completed') {
       return res.status(400).json({ message: 'Bạn chỉ có thể đánh giá sau khi chuyến bay hoàn tất.' });
     }

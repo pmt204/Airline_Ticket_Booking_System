@@ -8,7 +8,6 @@ const AdminBookings = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        // ĐÃ SỬA: Gọi đúng API lấy toàn bộ danh sách vé
         const res = await axiosClient.get('/api/bookings/all');
         setBookings(res.data);
       } catch (err) { console.error(err); }
@@ -54,7 +53,6 @@ const AdminBookings = () => {
                   <div className="text-xs text-gray-500">{b.user?.phone || '--'}</div>
                 </td>
                 
-                {/* ĐÃ CẬP NHẬT: Hiển thị đúng chuyến đi và nhãn Khứ hồi */}
                 <td className="p-4">
                   <div className="font-bold text-gray-800">{b.outboundFlight?.flightNumber || 'N/A'}</div>
                   {b.inboundFlight && <span className="block text-[10px] text-green-600 font-black uppercase tracking-widest mt-1">+ Khứ hồi</span>}
@@ -75,7 +73,6 @@ const AdminBookings = () => {
                 </td>
                 
                 <td className="p-4 text-center">
-                  {/* Điều hướng logic nút bấm chuẩn theo Trạng thái */}
                   {b.bookingStatus === 'Pending' && (
                      <button onClick={() => handleUpdateStatus(b._id, b.bookingStatus)} className="bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-blue-700 shadow-sm transition">
                        Duyệt vé

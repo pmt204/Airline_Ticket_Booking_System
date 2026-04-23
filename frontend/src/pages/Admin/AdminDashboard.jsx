@@ -26,7 +26,6 @@ const AdminDashboard = () => {
     fetchData();
   }, [reload]);
 
-  // Duyệt vé
   const handleUpdateStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === 'Pending' ? 'Confirmed' : 'Completed';
     try {
@@ -37,7 +36,6 @@ const AdminDashboard = () => {
       alert('Lỗi cập nhật!'); }
   };
 
-  // Lưu Giá & Hệ số hạng vé
   const handleSavePricing = async (e) => {
     e.preventDefault();
     try {
@@ -61,7 +59,6 @@ const AdminDashboard = () => {
       <div className="max-w-7xl mx-auto p-6">
         <h2 className="text-3xl font-black text-gray-800 mb-8 border-l-4 border-blue-600 pl-4">Bảng Điều Khiển (Quản Trị)</h2>
         
-        {/* DASHBOARD THỐNG KÊ */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
@@ -85,7 +82,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* ĐIỀU HƯỚNG TABS */}
         <div className="flex bg-white rounded-2xl shadow-sm mb-6 p-2 border border-gray-200 w-fit">
           <button onClick={() => setActiveTab('transactions')} className={`px-8 py-3 rounded-xl font-black transition ${activeTab === 'transactions' ? 'bg-gray-800 text-white' : 'text-gray-500 hover:bg-gray-100'}`}>
             🧾 QUẢN LÝ GIAO DỊCH
@@ -95,7 +91,6 @@ const AdminDashboard = () => {
           </button>
         </div>
 
-        {/* TAB 1: QUẢN LÝ GIAO DỊCH (Giữ nguyên như cũ) */}
         {activeTab === 'transactions' && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in">
             <div className="p-6 bg-gray-800 text-white flex justify-between items-center">
@@ -135,7 +130,6 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* TAB 2: QUẢN LÝ GIÁ VÀ HẠNG VÉ */}
         {activeTab === 'pricing' && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in">
              <div className="p-6 bg-red-700 text-white flex justify-between items-center">
@@ -166,7 +160,6 @@ const AdminDashboard = () => {
                         <span className="text-xs text-gray-400">{new Date(f.departureTime).toLocaleDateString('vi-VN')}</span>
                       </td>
                       
-                      {/* NẾU ĐANG BẤM SỬA CHUYẾN NÀY, HIỆN FORM NHẬP LIỆU */}
                       {editingFlight?._id === f._id ? (
                         <td colSpan="4" className="p-4 bg-red-50">
                           <form onSubmit={handleSavePricing} className="flex items-center gap-4">
@@ -192,7 +185,6 @@ const AdminDashboard = () => {
                           </form>
                         </td>
                       ) : (
-                        /* CHẾ ĐỘ XEM BÌNH THƯỜNG */
                         <>
                           <td className="p-4 font-black text-red-600 text-lg">{f.basePrice?.toLocaleString()} đ</td>
                           <td className="p-4 font-bold text-green-600">x {f.classMultipliers?.premium || 1.3}</td>

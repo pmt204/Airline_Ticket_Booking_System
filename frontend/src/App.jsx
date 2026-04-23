@@ -29,7 +29,6 @@ function App() {
     <Router>
       <Routes>
         
-        {/* LUỒNG 1: KHÁCH HÀNG (Dùng Layout thường) */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -45,7 +44,6 @@ function App() {
           <Route path="/booking/:id" element={<BookingDetails />} />
         </Route>
 
-        {/* LUỒNG 2: ADMIN (Dùng AdminLayout) */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<AdminDashboard />} />

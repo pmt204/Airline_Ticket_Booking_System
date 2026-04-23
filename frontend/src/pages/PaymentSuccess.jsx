@@ -31,7 +31,6 @@ const PaymentSuccess = () => {
     <div className="min-h-[70vh] flex items-center justify-center bg-gray-50 p-6">
       <div className="bg-white max-w-lg w-full p-8 rounded-2xl shadow-xl text-center">
         
-        {/* GIAO DIỆN KHI THÀNH CÔNG */}
         {status === 'success' && (
           <>
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -59,7 +58,6 @@ const PaymentSuccess = () => {
           </>
         )}
 
-        {/* GIAO DIỆN KHI THẤT BẠI HOẶC HỦY */}
         {status === 'failed' && (
           <>
             <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -70,7 +68,6 @@ const PaymentSuccess = () => {
           </>
         )}
 
-        {/* NÚT ĐIỀU HƯỚNG CHUNG */}
         <Link 
           to="/" 
           className="inline-block w-full bg-gray-800 text-white font-bold px-8 py-4 rounded-xl hover:bg-black transition shadow-md"

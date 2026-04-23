@@ -8,16 +8,15 @@ const Checkout = () => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
-  // Nhận dữ liệu từ cả 2 luồng: Một chiều (từ FlightDetails) và Khứ hồi (từ RoundTripDetails)
   const {
     isRoundTrip,
-    flightId, seat, // Dữ liệu luồng 1 chiều
-    outboundFlightId, inboundFlightId, outboundSeat, inboundSeat, // Dữ liệu luồng khứ hồi
-    outboundFlight: passedOutFlight, inboundFlight: passedInFlight, // Tóm tắt chuyến bay (Khứ hồi)
+    flightId, seat, 
+    outboundFlightId, inboundFlightId, outboundSeat, inboundSeat, 
+    outboundFlight: passedOutFlight, inboundFlight: passedInFlight, 
     totalAmount: passedTotalAmount
   } = location.state || {};
 
-  const [flight, setFlight] = useState(null); // Lưu thông tin chuyến bay 1 chiều
+  const [flight, setFlight] = useState(null); 
   const [passenger, setPassenger] = useState({ 
     firstName: '', 
     lastName: '', 
@@ -30,7 +29,6 @@ const Checkout = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
-    // 1. Chặn truy cập trái phép nếu không có dữ liệu
     if (!isRoundTrip && !flightId) {
       alert('Vui lòng chọn chuyến bay trước!');
       navigate('/');
@@ -42,7 +40,6 @@ const Checkout = () => {
       return;
     }
 
-    // 2. Tải dữ liệu nếu là vé 1 chiều (Vé khứ hồi đã truyền sẵn data rồi)
     if (!isRoundTrip && flightId) {
       const fetchFlight = async () => {
         try {
@@ -54,8 +51,6 @@ const Checkout = () => {
     }
   }, [flightId, isRoundTrip, outboundFlightId, inboundFlightId, navigate]);
 
-  // TÍNH TOÁN TIỀN
-  // Tiền gốc: Khứ hồi thì lấy từ total truyền sang, 1 chiều thì lấy từ flight.basePrice
   const baseTotal = isRoundTrip ? passedTotalAmount : (flight?.basePrice || 0);
   const finalAmount = Math.max(0, baseTotal - discountAmount);
 
@@ -76,7 +71,6 @@ const Checkout = () => {
     e.preventDefault();
     setIsProcessing(true);
     try {
-      // 1. GÓI DỮ LIỆU ĐỂ TẠO BOOKING 
       const bookingPayload = {
         userId: user?._id || null,
         outboundFlightId: isRoundTrip ? outboundFlightId : flightId, 
@@ -92,13 +86,11 @@ const Checkout = () => {
       const bookingRes = await axiosClient.post('/api/bookings', bookingPayload);
       const savedBookingCode = bookingRes.data.bookingCode;
 
-      // 2. GỌI VNPAY
       const { data } = await axiosClient.post('/api/payment/create_payment_url', {
         amount: finalAmount,
         bookingCode: savedBookingCode
       });
 
-      // 3. ĐÁ VĂNG SANG NGÂN HÀNG
       window.location.href = data.paymentUrl;
 
     } catch (error) {
@@ -108,13 +100,11 @@ const Checkout = () => {
     }
   };
 
-  // Đợi load data cho vé 1 chiều
   if (!isRoundTrip && !flight) return <div className="text-center mt-20 text-xl font-bold">Đang tải dữ liệu thanh toán...</div>;
 
   return (
     <div className="max-w-6xl mx-auto p-6 mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
       
-      {/* CỘT TRÁI: FORM HÀNH KHÁCH */}
       <div className="md:col-span-2 space-y-6">
         <div className="bg-white p-8 rounded-xl shadow-md border-t-4 border-red-600">
           <h2 className="text-2xl font-black mb-6 text-gray-800">👤 Thông tin hành khách</h2>
@@ -139,11 +129,9 @@ const Checkout = () => {
         </div>
       </div>
 
-      {/* CỘT PHẢI: TÓM TẮT & THANH TOÁN */}
       <div className="bg-white p-6 rounded-xl shadow-md h-fit border border-gray-100 sticky top-4">
         <h3 className="text-xl font-black text-gray-800 mb-4 border-b pb-2 uppercase text-center">Tóm tắt đơn hàng</h3>
 
-        {/* HIỂN THỊ UI KHÁC NHAU CHO KHỨ HỒI VÀ MỘT CHIỀU */}
         {isRoundTrip ? (
           <>
             <div className="mb-3 bg-blue-50 p-3 rounded-lg border border-blue-100">

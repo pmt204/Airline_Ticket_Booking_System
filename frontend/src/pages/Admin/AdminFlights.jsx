@@ -41,7 +41,6 @@ const AdminFlights = () => {
     }
   };
 
-  // Hàm xử lý Cập nhật Giá & Trạng thái
   const handleUpdate = async (id) => {
     try {
       await axiosClient.put(`/api/flights/${id}/price`, editData);
@@ -55,7 +54,6 @@ const AdminFlights = () => {
     <div className="max-w-7xl mx-auto p-6">
       <h2 className="text-2xl font-bold text-primary mb-6">Quản lý Chuyến bay</h2>
       
-      {/* KHU VỰC THÊM CHUYẾN BAY */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h3 className="text-lg font-bold mb-4">Thêm chuyến bay mới</h3>
         <form onSubmit={handleCreateFlight} className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -77,7 +75,6 @@ const AdminFlights = () => {
         </form>
       </div>
 
-      {/* DANH SÁCH & CHỈNH SỬA */}
       <div className="bg-white rounded-lg shadow-md overflow-x-auto">
         <table className="w-full text-left min-w-max">
           <thead className="bg-gray-800 text-white">
@@ -92,7 +89,6 @@ const AdminFlights = () => {
                 <td className="p-4">{f.departureAirport?.code} ➔ {f.arrivalAirport?.code}</td>
                 <td className="p-4">{new Date(f.departureTime).toLocaleString('vi-VN')}</td>
                 
-                {/* Chế độ xem hoặc Chế độ sửa */}
                 {editingId === f._id ? (
                   <>
                     <td className="p-4"><input type="number" className="border p-1 w-24" value={editData.basePrice} onChange={e => setEditData({...editData, basePrice: e.target.value})} /></td>

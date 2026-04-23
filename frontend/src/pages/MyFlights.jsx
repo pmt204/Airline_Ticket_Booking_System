@@ -27,7 +27,6 @@ const MyFlights = () => {
     fetchMyBookings();
   }, [user, navigate]);
 
-  // HÀM XỬ LÝ HỦY VÉ
   const handleCancelBooking = async (bookingId) => {
     const isConfirm = window.confirm(
       "⚠️ CẢNH BÁO: Bạn có chắc chắn muốn hủy chuyến bay này?\n\nHành động này không thể hoàn tác. Tiền sẽ được hoàn lại vào tài khoản trong 7-14 ngày làm việc theo chính sách."
@@ -66,7 +65,6 @@ const MyFlights = () => {
             {bookings.map(booking => (
               <div key={booking._id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition">
                 
-                {/* HEADER: MÃ ĐẶT CHỖ & TRẠNG THÁI */}
                 <div className={`px-6 py-3 flex flex-col md:flex-row justify-between items-center ${booking.bookingStatus === 'Cancelled' ? 'bg-gray-300' : 'bg-gray-800 text-white'}`}>
                   <div className="mb-2 md:mb-0">
                     <span className={`text-sm ${booking.bookingStatus === 'Cancelled' ? 'text-gray-600' : 'text-gray-400'}`}>Mã đặt chỗ (PNR): </span>
@@ -86,10 +84,8 @@ const MyFlights = () => {
 
                 <div className={`p-6 flex flex-col md:flex-row gap-6 ${booking.bookingStatus === 'Cancelled' ? 'opacity-50 grayscale' : ''}`}>
                   
-                  {/* CỘT TRÁI: THÔNG TIN CÁC CHUYẾN BAY */}
                   <div className="flex-1 space-y-4">
                     
-                    {/* CHIỀU ĐI */}
                     <div className="flex items-center justify-between bg-blue-50 p-4 rounded-xl border border-blue-100">
                       <div className="w-full">
                         <p className="text-[10px] font-black text-blue-600 tracking-widest uppercase mb-2">🛫 Chiều Đi</p>
@@ -115,7 +111,6 @@ const MyFlights = () => {
                       </div>
                     </div>
 
-                    {/* CHIỀU VỀ (Chỉ hiện nếu có) */}
                     {booking.inboundFlight && (
                       <div className="flex items-center justify-between bg-green-50 p-4 rounded-xl border border-green-100">
                         <div className="w-full">
@@ -145,7 +140,6 @@ const MyFlights = () => {
 
                   </div>
 
-                  {/* CỘT PHẢI: TÓM TẮT & HÀNH ĐỘNG */}
                   <div className="md:w-64 border-t md:border-t-0 md:border-l border-gray-200 pt-4 md:pt-0 md:pl-6 flex flex-col justify-between">
                     <div>
                       <p className="text-sm text-gray-500 font-bold uppercase">Hành khách:</p>
@@ -155,7 +149,6 @@ const MyFlights = () => {
                       <p className="text-2xl font-black text-red-600 mb-6">{booking.totalAmount?.toLocaleString()} đ</p>
                     </div>
 
-                    {/* NÚT HỦY VÉ */}
                     {booking.bookingStatus !== 'Cancelled' && !booking.isCheckedIn && (
                       <button 
                         onClick={() => handleCancelBooking(booking._id)}

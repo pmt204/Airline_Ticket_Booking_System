@@ -1,4 +1,4 @@
-const DEFAULT_PASSWORD_HASH = '$2a$10$xGJ9Q7K5X8M0YNw5ZK8YuO5Yv8Q6W5K8Yv9Z0A1B2C3D4E5F6G7H8'; // Mật khẩu: 123456
+const DEFAULT_PASSWORD_HASH = '$2a$10$xGJ9Q7K5X8M0YNw5ZK8YuO5Yv8Q6W5K8Yv9Z0A1B2C3D4E5F6G7H8'; 
 
 const mockUsers = [
   { fullName: 'Admin System', email: 'admin@flight.com', password: DEFAULT_PASSWORD_HASH, role: 'admin' },
@@ -20,7 +20,7 @@ const mockAirports = [
 const mockFlights = [
   {
     flightNumber: 'VN-213',
-    airlineCode: 'VN', // Dùng code tạm để Seeder tự map sang ID
+    airlineCode: 'VN', 
     departureAirportCode: 'HAN',
     arrivalAirportCode: 'SGN',
     departureTime: new Date('2026-05-01T08:00:00Z'),
@@ -48,7 +48,7 @@ const mockVouchers = [
   {
     code: 'SUMMER26',
     discountType: 'Percentage',
-    discountValue: 10, // Giảm 10%
+    discountValue: 10, 
     minPurchaseValue: 2000000,
     validFrom: new Date('2026-04-01T00:00:00Z'),
     validUntil: new Date('2026-08-31T23:59:59Z'),

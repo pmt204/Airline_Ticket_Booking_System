@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// 1. CẬP NHẬT LẠI HÀNH KHÁCH 
 const passengerSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   firstName: { type: String, required: true },
@@ -15,7 +14,6 @@ const passengerSchema = new mongoose.Schema({
   extraBaggage: { type: Number, default: 0 } 
 });
 
-// 2. CẬP NHẬT BOOKING 
 const bookingSchema = new mongoose.Schema({
   bookingCode: { type: String, required: true, unique: true }, 
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null }, 

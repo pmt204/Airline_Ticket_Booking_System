@@ -6,16 +6,13 @@ const Layout = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       <Navbar />
       
-      {/* Khung chứa nội dung các trang */}
       <main className="flex-grow">
         <Outlet />
       </main>
 
-      {/* FOOTER MỚI - HOÀNH TRÁNG & ĐẦY ĐỦ THÔNG TIN */}
       <footer className="bg-gray-900 text-white pt-12 pb-6 mt-12 shadow-inner">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           
-          {/* Cột 1: Giới thiệu */}
           <div>
             <h4 className="text-2xl font-black text-red-600 italic mb-4 tracking-tighter">
               VietTicket<span className="text-yellow-500">.com</span>
@@ -25,7 +22,6 @@ const Layout = () => {
             </p>
           </div>
 
-          {/* Cột 2: Liên hệ */}
           <div>
             <h4 className="text-lg font-bold mb-4 border-b border-gray-700 pb-2 text-gray-200">Liên Hệ</h4>
             <p className="text-gray-400 text-sm mb-3">📍 123 Đường Hàng Không, Phường 2, Thủ Đức, TP.HCM</p>
@@ -33,7 +29,6 @@ const Layout = () => {
             <p className="text-gray-400 text-sm">✉️ Email: support@vietticket.com</p>
           </div>
 
-          {/* Cột 3: Hỗ trợ */}
           <div>
             <h4 className="text-lg font-bold mb-4 border-b border-gray-700 pb-2 text-gray-200">Hỗ Trợ Khách Hàng</h4>
             <ul className="text-gray-400 text-sm space-y-3">
@@ -44,7 +39,6 @@ const Layout = () => {
             </ul>
           </div>
 
-          {/* Cột 4: Mạng xã hội & App */}
           <div>
             <h4 className="text-lg font-bold mb-4 border-b border-gray-700 pb-2 text-gray-200">Kết Nối Với Chúng Tôi</h4>
             <div className="flex gap-4 mb-6">

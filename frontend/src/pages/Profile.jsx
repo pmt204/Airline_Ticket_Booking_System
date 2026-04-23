@@ -13,7 +13,6 @@ const Profile = () => {
   const [reload, setReload] = useState(false);
   const navigate = useNavigate();
 
-  // STATE CHO MODAL ĐÁNH GIÁ
   const [reviewModal, setReviewModal] = useState({ isOpen: false, bookingId: null, rating: 5, comment: '' });
 
   useEffect(() => {
@@ -39,7 +38,6 @@ const Profile = () => {
       setMessage('Cập nhật thất bại!'); }
   };
 
-  // API Gửi Đánh Giá
   const handleSubmitReview = async (e) => {
     e.preventDefault();
     try {
@@ -49,7 +47,7 @@ const Profile = () => {
       });
       alert('Cảm ơn bạn đã đánh giá chuyến bay!');
       setReviewModal({ isOpen: false, bookingId: null, rating: 5, comment: '' });
-      setReload(!reload); // Load lại để hiện ngôi sao
+      setReload(!reload); 
     } catch (err) { alert(err.response?.data?.message || 'Có lỗi xảy ra'); }
   };
 
@@ -57,7 +55,6 @@ const Profile = () => {
     <div className="bg-gray-50 min-h-[85vh] py-10 relative">
       <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
         
-        {/* SIDEBAR */}
         <div className="md:col-span-1">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden text-center pb-6">
             <div className="bg-gray-800 h-24 w-full"></div>
@@ -72,10 +69,8 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* MAIN CONTENT */}
         <div className="md:col-span-3 space-y-8">
           
-          {/* Cập nhật thông tin */}
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
             <h3 className="text-xl font-black text-gray-800 mb-6 border-l-4 border-blue-600 pl-3">Thiết Lập Tài Khoản</h3>
             {message && <div className={`p-4 mb-6 rounded-lg font-bold text-center ${message.includes('thành công') ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>{message}</div>}
@@ -99,7 +94,6 @@ const Profile = () => {
             </form>
           </div>
 
-          {/* Lịch Sử Giao Dịch */}
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
             <h3 className="text-xl font-black text-gray-800 mb-6 border-l-4 border-red-600 pl-3">Lịch Sử Giao Dịch</h3>
             
@@ -132,10 +126,8 @@ const Profile = () => {
                           </span>
                         </td>
                         
-                        {/* CỘT HÀNH ĐỘNG / ĐÁNH GIÁ */}
                         <td className="p-4 text-center">
                           {b.bookingStatus === 'Completed' ? (
-                            // NẾU ĐÃ BAY: KIỂM TRA XEM ĐÃ ĐÁNH GIÁ CHƯA
                             b.rating ? (
                               <div className="text-yellow-400 text-lg tracking-widest" title={b.reviewComment}>
                                 {'★'.repeat(b.rating)}{'☆'.repeat(5 - b.rating)}
@@ -146,7 +138,6 @@ const Profile = () => {
                               </button>
                             )
                           ) : (
-                            // CÁC TRẠNG THÁI KHÁC
                             <button onClick={() => navigate(`/booking/${b._id}`)} className="text-blue-600 font-bold hover:text-blue-800 hover:underline text-xs bg-blue-50 px-3 py-1 rounded transition">
                               Chi tiết ➔
                             </button>
@@ -162,7 +153,6 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* MODAL ĐÁNH GIÁ TRẢI NGHIỆM */}
       {reviewModal.isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full animate-fade-in relative">

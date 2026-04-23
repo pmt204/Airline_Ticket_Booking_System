@@ -6,7 +6,6 @@ const AdminUsers = () => {
   const [reload, setReload] = useState(false); 
 
   useEffect(() => {
-    // Đưa hàm fetch vào hẳn bên trong useEffect để linter không báo lỗi
     const fetchUsers = async () => {
       try {
         const { data } = await axiosClient.get('/api/users');

@@ -29,13 +29,11 @@ const FlightDetails = () => {
 
   if (!flight || !seatMap) return <div className="text-center mt-20 text-xl font-bold">Đang tải thiết kế tàu bay...</div>;
 
-  // LOGIC TÍNH GIÁ ĐỘNG TỪ DATABASE (CẬP NHẬT MỚI)
   const getSeatInfo = (seatId) => {
     if (!seatId) return { name: '', price: 0, color: '' };
     const row = parseInt(seatId);
     const basePrice = flight.basePrice;
     
-    // Lấy hệ số Admin cấu hình, nếu lỗi chưa có thì mặc định x2 và x1.3
     const bizMulti = flight.classMultipliers?.business || 2.0;
     const premMulti = flight.classMultipliers?.premium || 1.3;
 
@@ -119,7 +117,6 @@ const FlightDetails = () => {
     <div className="bg-gray-50 py-10 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* CỘT TRÁI */}
         <div className="lg:col-span-2">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <h2 className="text-xl font-black text-gray-800 border-l-4 border-blue-600 pl-3">Sơ đồ máy bay</h2>
@@ -141,7 +138,6 @@ const FlightDetails = () => {
           </div>
         </div>
 
-        {/* CỘT PHẢI */}
         <div className="lg:col-span-1">
           <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 sticky top-4">
             <h3 className="text-lg font-black text-gray-800 mb-6 pb-4 border-b-2 border-dashed uppercase text-center">Tóm tắt chuyến bay</h3>

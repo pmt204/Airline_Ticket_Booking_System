@@ -6,13 +6,10 @@ const Home = () => {
   const navigate = useNavigate();
   const [airports, setAirports] = useState([]);
   
-  // State quản lý Tab hiển thị ('booking' hoặc 'feedback')
   const [activeTab, setActiveTab] = useState('booking'); 
 
-  // State dữ liệu Form Đặt vé
   const [searchParams, setSearchParams] = useState({ dep: '', arr: '', date: '', type: 'one-way' });
   
-  // State dữ liệu Form Phản hồi
   const [feedbackData, setFeedbackData] = useState({ name: '', email: '', message: '' });
 
   useEffect(() => {
@@ -32,10 +29,9 @@ const Home = () => {
 
   const handleFeedbackSubmit = (e) => {
     e.preventDefault();
-    // Ở đây nếu bác có API backend thì gắn vào, tạm thời hiện Alert báo thành công
     alert('Cảm ơn bạn đã gửi ý kiến phản hồi! Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.');
-    setFeedbackData({ name: '', email: '', message: '' }); // Xóa trắng form sau khi gửi
-    setActiveTab('booking'); // Tự động quay lại tab đặt vé
+    setFeedbackData({ name: '', email: '', message: '' }); 
+    setActiveTab('booking'); 
   };
 
   return (
@@ -54,7 +50,6 @@ const Home = () => {
 
         <div className="relative z-10 w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden mt-10">
           
-          {/* THANH ĐIỀU HƯỚNG TABS */}
           <div className="bg-red-600 text-white p-4 font-bold text-lg text-center flex justify-around cursor-pointer transition-all">
             <span 
               onClick={() => setActiveTab('booking')}
@@ -70,10 +65,8 @@ const Home = () => {
             </span>
           </div>
 
-          {/* HIỂN THỊ DỰA TRÊN TAB ĐANG CHỌN */}
           {activeTab === 'booking' ? (
             
-            // FORM ĐẶT VÉ (Giữ nguyên như cũ)
             <form onSubmit={handleSearch} className="p-6 animate-fade-in">
               <div className="flex gap-6 mb-6 font-bold text-gray-700">
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -119,7 +112,6 @@ const Home = () => {
 
           ) : (
 
-            // FORM PHẢN HỒI (Mới thêm)
             <form onSubmit={handleFeedbackSubmit} className="p-6 space-y-5 animate-fade-in">
               <div className="text-center mb-2">
                 <h3 className="text-lg font-black text-gray-800">Lắng nghe ý kiến của bạn</h3>
@@ -153,7 +145,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* 2. CHUYÊN MỤC VOUCHER & KHUYẾN MÃI */}
       <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-black text-gray-800 uppercase">Khuyến Mãi Nổi Bật</h2>
@@ -188,7 +179,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* 3. THÀNH TỰU & GIỚI THIỆU */}
       <div className="bg-gray-100 py-16 relative z-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
@@ -221,7 +211,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* 4. ĐỐI TÁC HÃNG BAY */}
       <div className="max-w-7xl mx-auto px-6 py-16 text-center relative z-10">
         <h2 className="text-2xl font-black text-gray-800 uppercase mb-8">Đối tác Hàng không uy tín</h2>
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition duration-500">

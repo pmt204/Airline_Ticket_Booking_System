@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-// 1. Cửa kiểm tra Đăng nhập
 const protect = async (req, res, next) => {
   let token;
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -19,7 +18,6 @@ const protect = async (req, res, next) => {
   }
 };
 
-// 2. Cửa kiểm tra quyền Admin
 const admin = (req, res, next) => {
   if (req.user && req.user.role === 'admin') {
     next();

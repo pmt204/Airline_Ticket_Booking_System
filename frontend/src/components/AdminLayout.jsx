@@ -7,7 +7,6 @@ const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Bảo vệ route: Nếu không phải Admin thì đuổi ra
   if (!user || user.role !== 'admin') {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -25,15 +24,12 @@ const AdminLayout = () => {
     navigate('/');
   };
 
-  // Hàm phụ trợ để kiểm tra xem menu nào đang được chọn
   const isActive = (path) => location.pathname.includes(path);
 
   return (
     <div className="flex h-screen bg-gray-100 font-sans overflow-hidden">
       
-      {/* SIDEBAR BÊN TRÁI */}
       <aside className="w-64 bg-gray-900 text-white flex flex-col shadow-2xl z-20">
-        {/* Logo Admin */}
         <div className="p-6 text-center border-b border-gray-800 bg-gray-950">
           <h2 className="text-2xl font-black italic text-red-600">
             VietTicket<span className="text-yellow-500">.com</span>
@@ -41,7 +37,6 @@ const AdminLayout = () => {
           <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest">Admin Workspace</p>
         </div>
 
-        {/* Menu điều hướng */}
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
           <Link to="/admin/dashboard" className={`block px-4 py-3 rounded-lg font-bold transition ${isActive('dashboard') ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}`}>
             📊 Bảng Thống Kê
@@ -63,7 +58,6 @@ const AdminLayout = () => {
           </Link>
         </nav>
 
-        {/* Nút thoát */}
         <div className="p-4 border-t border-gray-800 bg-gray-950">
           <Link to="/" className="block px-4 py-2 text-center text-sm font-bold text-gray-400 hover:text-white mb-2">
             ⬅ Về Website Khách Hàng
@@ -74,10 +68,8 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      {/* KHU VỰC NỘI DUNG BÊN PHẢI */}
       <main className="flex-1 flex flex-col h-screen relative">
         
-        {/* Topbar (Thanh ngang phía trên) */}
         <header className="bg-white shadow-sm p-4 flex justify-between items-center z-10">
           <h1 className="text-xl font-bold text-gray-700">Hệ Thống Quản Trị Trung Tâm</h1>
           
@@ -92,7 +84,6 @@ const AdminLayout = () => {
           </div>
         </header>
 
-        {/* Khung nhúng các trang (Dashboard, Flights, Users) */}
         <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
           <Outlet /> 
         </div>

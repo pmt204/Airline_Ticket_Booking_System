@@ -48,7 +48,6 @@ const RoundTripDetails = () => {
 
   if (!outboundFlight || !inboundFlight) return <div className="text-center mt-20 font-bold text-xl">Đang thiết lập sơ đồ ghế...</div>;
 
-  // LOGIC TÍNH GIÁ ĐỘNG TỪ DATABASE 
   const getSeatInfo = (seatId, flightObj) => {
     if (!seatId || !flightObj) return { name: '', price: flightObj?.basePrice || 0, color: '' };
     const row = parseInt(seatId);
@@ -145,7 +144,6 @@ const RoundTripDetails = () => {
     <div className="bg-gray-50 py-10 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* CỘT TRÁI */}
         <div className="lg:col-span-2">
           
           <div className="flex bg-white rounded-2xl shadow-sm mb-4 p-2 border border-gray-200">
@@ -178,12 +176,10 @@ const RoundTripDetails = () => {
 
         </div>
 
-        {/* CỘT PHẢI */}
         <div className="lg:col-span-1">
           <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 sticky top-4">
             <h3 className="text-lg font-black text-gray-800 mb-6 pb-4 border-b-2 border-dashed uppercase text-center">Tóm tắt Khứ Hồi</h3>
             
-            {/* Tóm tắt chiều đi */}
             <div className={`mb-4 p-4 rounded-xl border transition-colors ${selectedOutboundSeat ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-100'}`}>
               <p className="text-xs font-black text-blue-600 mb-2 tracking-widest uppercase">🛫 CHIỀU ĐI • {new Date(outboundFlight.departureTime).toLocaleDateString('vi-VN')}</p>
               <div className="flex justify-between items-center mb-2">
@@ -196,7 +192,6 @@ const RoundTripDetails = () => {
               </div>
             </div>
 
-            {/* Tóm tắt chiều về */}
             <div className={`mb-6 p-4 rounded-xl border transition-colors ${selectedInboundSeat ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-100'}`}>
               <p className="text-xs font-black text-blue-600 mb-2 tracking-widest uppercase">🛬 CHIỀU VỀ • {new Date(inboundFlight.departureTime).toLocaleDateString('vi-VN')}</p>
               <div className="flex justify-between items-center mb-2">

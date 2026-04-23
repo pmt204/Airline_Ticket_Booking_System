@@ -5,7 +5,6 @@ const AdminVouchers = () => {
   const [vouchers, setVouchers] = useState([]);
   const [reload, setReload] = useState(false);
 
-  // State cho Form tạo Voucher
   const [newVoucher, setNewVoucher] = useState({
     code: '', discountType: 'Percentage', discountValue: '', minPurchaseValue: 0,
     validFrom: '', validUntil: '', usageLimit: 100
@@ -42,7 +41,6 @@ const AdminVouchers = () => {
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-800">🎟️ Quản Lý Mã Khuyến Mãi (Vouchers)</h2>
 
-      {/* FORM TẠO VOUCHER */}
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <h3 className="text-lg font-bold text-blue-600 mb-4">+ Tạo Voucher Mới</h3>
         <form onSubmit={handleCreateVoucher} className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-gray-50 p-4 rounded border">
@@ -90,7 +88,6 @@ const AdminVouchers = () => {
         </form>
       </div>
 
-      {/* DANH SÁCH VOUCHER */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <table className="w-full text-left text-sm">
           <thead className="bg-gray-800 text-white">

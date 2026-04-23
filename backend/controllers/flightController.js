@@ -2,7 +2,6 @@ const Flight = require('../models/Flight');
 const Airport = require('../models/Airport');
 const Airline = require('../models/Airline');
 
-// CHỨC NĂNG 1: QUẢN LÝ SÂN BAY & HÃNG BAY 
 const getAirports = async (req, res) => {
   try { res.json(await Airport.find({})); } 
   catch (error) { res.status(500).json({ message: 'Lỗi lấy sân bay' }); }
@@ -23,7 +22,6 @@ const createAirline = async (req, res) => {
   catch (error) { res.status(400).json({ message: 'Lỗi tạo hãng bay', error: error.message }); }
 };
 
-// CHỨC NĂNG 2: QUẢN LÝ CHUYẾN BAY 
 const getAllFlights = async (req, res) => {
   try {
     const flights = await Flight.find({})
@@ -39,7 +37,7 @@ const getAllFlights = async (req, res) => {
 
 const createFlight = async (req, res) => {
   try {
-    const flightData = { ...req.body, availableSeats: req.body.seatCapacity }; // Ghế trống = Tổng ghế
+    const flightData = { ...req.body, availableSeats: req.body.seatCapacity }; 
     const newFlight = await Flight.create(flightData);
     res.status(201).json(newFlight);
   } catch (error) { res.status(400).json({ message: 'Lỗi tạo chuyến bay' }); }
@@ -53,7 +51,6 @@ const deleteFlight = async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Lỗi xóa chuyến bay' }); }
 };
 
-// CHỨC NĂNG 3: CẤU HÌNH GIÁ VÀ CHỖ NGỒI (Admin)
 const updateFlightPricing = async (req, res) => {
   try {
     const { basePrice, status } = req.body;
@@ -68,16 +65,13 @@ const updateFlightPricing = async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Lỗi cập nhật giá' }); }
 };
 
-// CHỨC NĂNG 4: TÌM KIẾM, LỌC & SẮP XẾP (Public)
 const searchFlights = async (req, res) => {
   try {
     const { dep, arr, date, minPrice, maxPrice, airline, sort } = req.query;
     let query = { status: 'Scheduled' }; 
-    // Lọc theo Nơi đi, Nơi đến
     if (dep) query.departureAirport = dep;
     if (arr) query.arrivalAirport = arr;
 
-    // Lọc theo Ngày bay 
     if (date) {
       const searchDate = new Date(date);
       const nextDate = new Date(searchDate);
@@ -85,23 +79,19 @@ const searchFlights = async (req, res) => {
       query.departureTime = { $gte: searchDate, $lt: nextDate };
     }
 
-    // Lọc theo Khoảng giá
     if (minPrice || maxPrice) {
       query.basePrice = {};
       if (minPrice) query.basePrice.$gte = Number(minPrice);
       if (maxPrice) query.basePrice.$lte = Number(maxPrice);
     }
 
-    // Lọc theo Hãng bay
     if (airline) query.airline = airline;
 
-    // Xử lý Sắp xếp (Sort)
     let sortObj = { departureTime: 1 }; 
     if (sort === 'price_asc') sortObj = { basePrice: 1 };
     if (sort === 'price_desc') sortObj = { basePrice: -1 };
     if (sort === 'time_desc') sortObj = { departureTime: -1 };
 
-    // Thực thi Query với MongoDB
     const flights = await Flight.find(query)
       .populate('airline', 'name code logoUrl')
       .populate('departureAirport', 'name code city')
@@ -112,7 +102,6 @@ const searchFlights = async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Lỗi tìm kiếm chuyến bay', error: error.message }); }
 };
 
-// CHỨC NĂNG 5: XEM CHI TIẾT CHUYẾN BAY 
 const getFlightById = async (req, res) => {
   try {
     const flight = await Flight.findById(req.params.id)
@@ -126,7 +115,6 @@ const getFlightById = async (req, res) => {
 };
 
 
-// CHỨC NĂNG 6: DỮ LIỆU SƠ ĐỒ CHỖ NGỒI 
 const getSeatMap = async (req, res) => {
   try {
     const flight = await Flight.findById(req.params.id).select('seatCapacity bookedSeats');
@@ -140,9 +128,7 @@ const getSeatMap = async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Lỗi lấy sơ đồ ghế' }); }
 };
 
-// CHỨC NĂNG 7: BẬT/TẮT TRẠNG THÁI 
 
-// Bật/tắt Hãng bay
 const toggleAirlineStatus = async (req, res) => {
   try {
     const airline = await Airline.findById(req.params.id);
@@ -154,7 +140,6 @@ const toggleAirlineStatus = async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Lỗi cập nhật trạng thái hãng bay' }); }
 };
 
-// Bật/tắt Sân bay
 const toggleAirportStatus = async (req, res) => {
   try {
     const airport = await Airport.findById(req.params.id);

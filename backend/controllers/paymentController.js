@@ -15,7 +15,6 @@ const createPaymentUrl = async (req, res) => {
     let vnpUrl = process.env.VNP_URL;
     let returnUrl = process.env.VNP_RETURN_URL;
 
-    // Nhận dữ liệu từ Frontend truyền lên
     let orderId = req.body.bookingCode || moment(date).format('DDHHmmss'); 
     let amount = req.body.amount; 
     let bankCode = ''; 
@@ -37,17 +36,14 @@ const createPaymentUrl = async (req, res) => {
         vnp_Params['vnp_BankCode'] = bankCode;
     }
 
-    // Sắp xếp dữ liệu theo thứ tự a-z trước khi băm 
     vnp_Params = sortObject(vnp_Params);
 
-    // Ký dữ liệu
     let signData = querystring.stringify(vnp_Params, { encode: false });
     let hmac = crypto.createHmac("sha512", secretKey);
     let signed = hmac.update(new Buffer.from(signData, 'utf-8')).digest("hex"); 
     vnp_Params['vnp_SecureHash'] = signed;
     vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
 
-    // Trả link về cho Frontend để tự redirect
     res.status(200).json({ paymentUrl: vnpUrl });
   } catch (error) {
     console.error('Lỗi tạo link VNPay:', error);
@@ -55,7 +51,6 @@ const createPaymentUrl = async (req, res) => {
   }
 };
 
-// Hàm phụ trợ sắp xếp Object của VNPay
 function sortObject(obj) {
 	let sorted = {};
 	let str = [];
